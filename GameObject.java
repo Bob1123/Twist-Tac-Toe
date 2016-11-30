@@ -1,3 +1,6 @@
+import java.awt.Color;
+import java.awt.Graphics;
+
 public abstract class GameObject implements Drawable {
 
 	// ---------------------------------------------------------------------------------- Properties
@@ -5,6 +8,28 @@ public abstract class GameObject implements Drawable {
 	private int x, y, width, height;
 	
 	// ---------------------------------------------------------------------------------- Methods
+	
+	public void drawFillRect(Graphics g, Color c, int x, int y, int width, int height) {
+		g.setColor(c);
+		g.fillRect(x, y, width, height);
+		g.setColor(Color.BLACK);
+		g.drawRect(x, y, width, height);
+	}
+	
+	public void drawFillRect(Graphics g, Color c) {
+		drawFillRect(g, c, x, y, width, height);
+	}
+	
+	public void drawFillOval(Graphics g, Color c, int x, int y, int width, int height) {
+		g.setColor(c);
+		g.fillOval(x, y, width, height);
+		g.setColor(Color.BLACK);
+		g.fillOval(x, y, width, height);
+	}
+	
+	public void drawFillOval(Graphics g, Color c) {
+		drawFillOval(g, c, x, y, width, height);
+	}
 	
 	// ---------------------------------------------------------------------------------- Getters and Setters
 
