@@ -1,4 +1,4 @@
-public abstract class GameObject implements Drawable{
+public abstract class GameObject implements Drawable {
   
   //---------------------------------------------------Properties
   private int x, y, width, height;
