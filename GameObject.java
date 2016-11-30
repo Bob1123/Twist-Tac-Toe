@@ -9,7 +9,7 @@ public abstract class GameObject implements Drawable{
   }
   
   public int getX(){
-    return this.X;
+    return this.x;
   }
   
   public void setY(int y){
