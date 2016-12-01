@@ -23,4 +23,28 @@ public class GameBoard extends GameObject {
 	
 	// ---------------------------------------------------------------------------------- Getters and Setters
 	
+	@Override
+	public String toString() {
+		return "GameBoard [NW: "+ NW.toString()  + " NE: " + NE.toString() + " SW: " + SW.toString() 
+			+ " SE: " + SE.toString() + "] " + super.toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof GameBoard))
+			return false;
+		GameBoard other = (GameBoard) obj;
+		if (!(NE.equals(other.getNE())))
+			return false;
+		if (!(NW.equals(other.getNW())))
+			return false;
+		if (!(SE.equals(other.getSE())))
+			return false;
+		if (!(SW.equals(other.getSW())))
+			return false;
+		return true;
+	}
+	
 }
