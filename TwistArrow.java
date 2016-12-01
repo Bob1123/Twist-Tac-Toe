@@ -15,11 +15,20 @@ public class TwistArrow extends GameObject {
 	
 	// ---------------------------------------------------------------------------------- Constructors
 	
-	TwistArrow(boolean used) {
-		
+	public TwistArrow(boolean used, ArrowType type) {
+		setType(type);
+		setUsed(used);
+	}
+	
+	public TwistArrow(ArrowType type) {
+		this(true, type);
 	}
 	
 	// ---------------------------------------------------------------------------------- Methods
+	
+	public TwistArrow clone() {
+		return new TwistArrow(isUsed(), getType());
+	}
 	
 	public void draw(Graphics g) {
 		switch(type) {
@@ -63,5 +72,25 @@ public class TwistArrow extends GameObject {
 	public void setUsed(boolean used) {
 		this.used = used;
 	}
+
+	@Override
+	public String toString() {
+		return "TwistArrow [type=" + type + ", used=" + used + "] " + super.toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof TwistArrow))
+			return false;
+		TwistArrow other = (TwistArrow) obj;
+		if (used != other.isUsed())
+			return false;
+		if (type != other.getType())
+			return false;
+		return true;
+	}
+	
 	
 }

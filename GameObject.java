@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Graphics;
 
+import javax.annotation.processing.SupportedSourceVersion;
+
 public abstract class GameObject implements Drawable {
 
 	// ---------------------------------------------------------------------------------- Properties
@@ -68,4 +70,41 @@ public abstract class GameObject implements Drawable {
 	public int getHeight(){
 		return this.height;
 	}
+
+	@Override
+	public String toString() {
+		return "GameObject [x=" + x + ", y=" + y + ", width=" + width + ", height=" + height + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + height;
+		result = prime * result + width;
+		result = prime * result + x;
+		result = prime * result + y;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof GameObject))
+			return false;
+		GameObject other = (GameObject) obj;
+		if (height != other.getHeight())
+			return false;
+		if (width != other.getWidth())
+			return false;
+		if (x != other.getX())
+			return false;
+		if (y != other.getY())
+			return false;
+		return true;
+	}
+	
 }
