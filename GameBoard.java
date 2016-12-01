@@ -21,8 +21,6 @@ public class GameBoard extends GameObject {
 		SE.draw(g);
 	}
 	
-	// ---------------------------------------------------------------------------------- Getters and Setters
-	
 	@Override
 	public String toString() {
 		return "GameBoard [NW: "+ NW.toString()  + " NE: " + NE.toString() + " SW: " + SW.toString() 
