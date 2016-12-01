@@ -15,7 +15,10 @@ public class GameBoard extends GameObject {
 	// ---------------------------------------------------------------------------------- Methods
 	
 	public void draw(Graphics g) {
-		
+		NW.draw(g);
+		NE.draw(g);
+		SW.draw(g);
+		SE.draw(g);
 	}
 	
 	@Override
