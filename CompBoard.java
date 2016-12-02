@@ -7,8 +7,8 @@ public class CompBoard extends GameObject {
 	// ---------------------------------------------------------------------------------- Properties
 	
 	// Sets the number of rows and columns in each CompBoard
-	public static final int rows = 3;
-	public static final int columns = 3;
+	public static final int ROWS = 3;
+	public static final int COLUMNS = 3;
 	
 	private GamePiece[][] board;
 	private TwistArrow[] arrows;
@@ -36,10 +36,10 @@ public class CompBoard extends GameObject {
 	
 	// Creates initial CompBoard with blank GamePieces. Used in Constructor.
 	private static GamePiece[][] createBoard(int x, int y, int width, int height) {
-		GamePiece[][] board = new GamePiece[rows][columns];
-		for(int row = 0; row < rows; row++) {
-			for(int col = 0; col < columns; col++) {
-				board[row][col] = new GamePiece(x+col*width/columns, y+row*height/rows, width/columns, height/rows);
+		GamePiece[][] board = new GamePiece[ROWS][COLUMNS];
+		for(int row = 0; row < ROWS; row++) {
+			for(int col = 0; col < COLUMNS; col++) {
+				board[row][col] = new GamePiece(x+col*width/COLUMNS, y+row*height/ROWS, width/COLUMNS, height/ROWS);
 			}
 		}
 		return board;
@@ -49,20 +49,20 @@ public class CompBoard extends GameObject {
 	private static TwistArrow[] createArrows(int x, int y, int width, int height, CompType type) {
 		TwistArrow[] arrows = new TwistArrow[2];
 		if(type == CompType.NE) {
-			arrows[0] = new TwistArrow(ArrowType.NW, x+(columns-1)*width/columns, y-height/rows, width/columns, height/rows);
-			arrows[1] = new TwistArrow(ArrowType.SE, x+width, y, width/columns, height/rows);
+			arrows[0] = new TwistArrow(ArrowType.NW, x+(COLUMNS-1)*width/COLUMNS, y-height/ROWS, width/COLUMNS, height/ROWS);
+			arrows[1] = new TwistArrow(ArrowType.SE, x+width, y, width/COLUMNS, height/ROWS);
 		}
 		if(type == CompType.NW) {
-			arrows[0] = new TwistArrow(ArrowType.NE, x, y-height/rows, width/columns, height/rows);
-			arrows[1] = new TwistArrow(ArrowType.SW, x-width/columns, y, width/columns, height/rows);
+			arrows[0] = new TwistArrow(ArrowType.NE, x, y-height/ROWS, width/COLUMNS, height/ROWS);
+			arrows[1] = new TwistArrow(ArrowType.SW, x-width/COLUMNS, y, width/COLUMNS, height/ROWS);
 		}
 		if(type == CompType.SW) {
-			arrows[0] = new TwistArrow(ArrowType.NW, x-width/columns, y+(rows-1)*height/rows, width/columns, height/rows);
-			arrows[1] = new TwistArrow(ArrowType.SE, x, y+height, width/columns, height/rows);
+			arrows[0] = new TwistArrow(ArrowType.NW, x-width/COLUMNS, y+(ROWS-1)*height/ROWS, width/COLUMNS, height/ROWS);
+			arrows[1] = new TwistArrow(ArrowType.SE, x, y+height, width/COLUMNS, height/ROWS);
 		}
 		if(type == CompType.SE) {
-			arrows[0] = new TwistArrow(ArrowType.NE, x+width, y+(rows-1)*height/rows, width/columns, height/rows);
-			arrows[1] = new TwistArrow(ArrowType.SW, x+(columns-1)*width/columns, y+height, width/columns, height/rows);
+			arrows[0] = new TwistArrow(ArrowType.NE, x+width, y+(ROWS-1)*height/ROWS, width/COLUMNS, height/ROWS);
+			arrows[1] = new TwistArrow(ArrowType.SW, x+(COLUMNS-1)*width/COLUMNS, y+height, width/COLUMNS, height/ROWS);
 		}
 		return arrows;
 	}
@@ -100,14 +100,15 @@ public class CompBoard extends GameObject {
 		}
 	}
 	
-	// Draws the CompBoard by drawing its lines, GamePieces, and TwistPieces. (Replace with a loop)
+	// Draws the CompBoard by drawing its lines, GamePieces, and TwistPieces.
 	public void draw(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.drawRect(getX(), getY(), getWidth(), getHeight());
-		g.drawLine(getX()+getWidth()/3, getY(), getX()+getWidth()/3, getY()+getHeight());
-		g.drawLine(getX()+getWidth()*2/3, getY(), getX()+getWidth()*2/3, getY()+getHeight());
-		g.drawLine(getX(), getY()+getHeight()/3, getX()+getWidth(), getY()+getHeight()/3);
-		g.drawLine(getX(), getY()+getHeight()*2/3, getX()+getWidth(), getY()+getHeight()*2/3);
+		for(int i = 0; i <= ROWS; i++) {
+			g.drawLine(getX() + i*getWidth()/ROWS, getY(), getX() + i*getWidth()/ROWS, getY()+getHeight());
+		}
+		for(int i = 0; i <= COLUMNS; i++) {
+			g.drawLine(getX(), getY() + i*getHeight()/COLUMNS, getX()+getWidth(), getY() + i*getHeight()/COLUMNS);
+		}
 		for(GamePiece[] row : board) {
 			for(GamePiece p : row) {
 				if(p != null) {
