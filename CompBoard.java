@@ -106,8 +106,8 @@ public class CompBoard extends GameObject {
 		g.drawRect(getX(), getY(), getWidth(), getHeight());
 		g.drawLine(getX()+getWidth()/3, getY(), getX()+getWidth()/3, getY()+getHeight());
 		g.drawLine(getX()+getWidth()*2/3, getY(), getX()+getWidth()*2/3, getY()+getHeight());
-		g.drawLine(getX(), getY()+getHeight()/3, getX(), getY()+getHeight()/3);
-		g.drawLine(getX(), getY()+getHeight()*2/3, getX(), getY()+getHeight()*2/3);
+		g.drawLine(getX(), getY()+getHeight()/3, getX()+getWidth(), getY()+getHeight()/3);
+		g.drawLine(getX(), getY()+getHeight()*2/3, getX()+getWidth(), getY()+getHeight()*2/3);
 		for(GamePiece[] row : board) {
 			for(GamePiece p : row) {
 				if(p != null) {

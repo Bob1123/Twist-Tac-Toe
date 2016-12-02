@@ -27,7 +27,7 @@ public abstract class GameObject implements Drawable {
 		g.setColor(c);
 		g.fillOval(x, y, width, height);
 		g.setColor(Color.BLACK);
-		g.fillOval(x, y, width, height);
+		g.drawOval(x, y, width, height);
 	}
 	
 	public void drawFillOval(Graphics g, Color c) {

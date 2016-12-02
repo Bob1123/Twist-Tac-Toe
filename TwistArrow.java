@@ -9,12 +9,7 @@ public class TwistArrow extends GameObject {
 	private ArrowType type;
 	private boolean used;
 	
-	// Used internally to draw arrow
-	private Point UL = new Point(getX(), getY());
-	private Point UR = new Point(getX()+getWidth(), getY());
-	private Point BL = new Point(getX(), getY()+getHeight());
-	private Point BR = new Point(getX()+getWidth(), getY()+getHeight());
-	
+
 	// ---------------------------------------------------------------------------------- Constructors
 	
 	// Workhorse
@@ -40,6 +35,14 @@ public class TwistArrow extends GameObject {
 	
 	// Draws TwistArrow depending on type
 	public void draw(Graphics g) {
+		// Used internally to draw arrow
+		// Tried to place these outside of this method, but
+		// the arrows wouldn't draw
+		Point UL = new Point(getX(), getY());
+		Point UR = new Point(getX()+getWidth(), getY());
+		Point BL = new Point(getX(), getY()+getHeight());
+		Point BR = new Point(getX()+getWidth(), getY()+getHeight());
+		
 		switch(type) {
 		case NE:
 			g.drawLine(BL.x, BL.y, UR.x, UR.y);
