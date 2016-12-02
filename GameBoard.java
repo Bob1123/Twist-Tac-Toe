@@ -43,6 +43,10 @@ public class GameBoard extends GameObject {
 		return true;
 	}
 	
+	public GameBoard clone() {
+		return new GameBoard(getNW(), getNE(), getSW(), getSE(), getX(), getY(), getWidth(), getHeight());
+	}
+	
 	// ---------------------------------------------------------------------------------- Methods
 	
 	
@@ -58,7 +62,7 @@ public class GameBoard extends GameObject {
 	}
 
 	public void SetNW(CompBoard NW) {
-		NW = this.NW;
+		this.NW = NW;
 	}
 
 	public CompBoard getNE() {
@@ -66,7 +70,7 @@ public class GameBoard extends GameObject {
 	}
 
 	public void SetNE(CompBoard NE) {
-		NE = this.NE;
+		this.NE = NE;
 	}
 
 	public CompBoard getSW() {
@@ -74,7 +78,7 @@ public class GameBoard extends GameObject {
 	}
 
 	public void SetSW(CompBoard SW) {
-		SW = this.SW;
+		this.SW = SW;
 	}
 
 	public CompBoard getSE() {
@@ -82,7 +86,7 @@ public class GameBoard extends GameObject {
 	}
 
 	public void SetSE(CompBoard SE) {
-		SE = this.SE;
+		this.SE = SE;
 	}
 
 	@Override

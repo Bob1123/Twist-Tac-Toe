@@ -34,6 +34,11 @@ public class GamePiece extends GameObject {
 		drawFillOval(g, type.getColor(), getX()+getWidth()/10, getY()+getHeight()/10, getWidth()*8/10, getHeight()*8/10);
 	}
 	
+	// Method to return if this piece is the same color as another
+	public boolean samePlayer(GamePiece p) {
+		return p.getType() == getType();
+	}
+	
 	// ---------------------------------------------------------------------------------- Getters and Setters
 	
 	public PieceType getType() {
@@ -46,13 +51,23 @@ public class GamePiece extends GameObject {
 
 	@Override
 	public String toString() {
-		return "GamePiece [type=" + type + ", x=" + getX() + ", y=" + getY() + "]";
+		return "GamePiece [type=" + type + "] " + super.toString();
 	}
-	
+
 	@Override
-	public boolean equals(Object o) {
-		// Figure this out later
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof GamePiece))
+			return false;
+		GamePiece other = (GamePiece) obj;
+		if (type != other.type)
+			return false;
 		return true;
 	}
+	
+
    
 }

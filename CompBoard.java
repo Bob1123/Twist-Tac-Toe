@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Arrays;
 
 public class CompBoard extends GameObject {
 	
@@ -121,7 +122,9 @@ public class CompBoard extends GameObject {
 		}
 	}
 
-
+	public CompBoard clone() {
+		return new CompBoard(getBoard(), getArrows(), getType(), getX(), getY(), getWidth(), getHeight());
+	}
 	
 	// ---------------------------------------------------------------------------------- Getters and Setters
 	
@@ -148,5 +151,31 @@ public class CompBoard extends GameObject {
 	public void setType(CompType type) {
 		this.type = type;
 	}
+
+	@Override
+	public String toString() {
+		return "CompBoard [board=" + Arrays.toString(board) + ", arrows=" + Arrays.toString(arrows) + ", type=" + type
+				+ "] " + super.toString();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof CompBoard))
+			return false;
+		CompBoard other = (CompBoard) obj;
+		if (!Arrays.equals(arrows, other.arrows))
+			return false;
+		if (!Arrays.deepEquals(board, other.board))
+			return false;
+		if (type != other.type)
+			return false;
+		return true;
+	}
+	
+		
 	
 }
