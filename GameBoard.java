@@ -4,10 +4,12 @@ public class GameBoard extends GameObject {
 	
 	// ---------------------------------------------------------------------------------- Properties
 	
+	// The four CompBoard. Might change to Array.
 	private CompBoard NW, NE, SW, SE;
 	
 	// ---------------------------------------------------------------------------------- Constructors
 	
+	// Workhorse
 	public GameBoard(CompBoard NW, CompBoard NE, CompBoard SW, CompBoard SE, int x, int y, int width, int height) {
 		SetNE(NE);
 		SetNW(NW);
@@ -19,6 +21,7 @@ public class GameBoard extends GameObject {
 		setHeight(height);
 	}
 	
+	// Use this constructor generally
 	public GameBoard(int x, int y, int width, int height) {
 		this(new CompBoard(CompType.NW, x, y, width/2, height/2), new CompBoard(CompType.NE, x+width/2, y, width/2, height/2),
 				new CompBoard(CompType.SW, x, y+height/2, width/2, height/2), new CompBoard(CompType.SE, x+width/2, y+height/2, width/2, height/2),
@@ -27,6 +30,7 @@ public class GameBoard extends GameObject {
 	
 	// ---------------------------------------------------------------------------------- Methods
 	
+	// Draws GameBoard by drawing its CompBoards
 	public void draw(Graphics g) {
 		NW.draw(g);
 		NE.draw(g);
@@ -34,6 +38,7 @@ public class GameBoard extends GameObject {
 		SE.draw(g);
 	}
 	
+	// Used to see if there is a win in GameBoard
 	public boolean checkWin() {
 		return true;
 	}

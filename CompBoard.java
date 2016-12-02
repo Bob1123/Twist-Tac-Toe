@@ -5,6 +5,7 @@ public class CompBoard extends GameObject {
 	
 	// ---------------------------------------------------------------------------------- Properties
 	
+	// Sets the number of rows and columns in each CompBoard
 	public static final int rows = 3;
 	public static final int columns = 3;
 	
@@ -14,6 +15,7 @@ public class CompBoard extends GameObject {
 
 	// ---------------------------------------------------------------------------------- Constructors
 	
+	// Workhorse
 	public CompBoard(GamePiece[][] board, TwistArrow[] arrows, CompType type, int x, int y, int width, int height) {
 		setBoard(board);
 		setArrows(arrows);
@@ -24,12 +26,14 @@ public class CompBoard extends GameObject {
 		setHeight(height);
 	}
 	
+	// Use this constructor generally
 	public CompBoard(CompType type, int x, int y, int width, int height) {
 		this(createBoard(x, y, width, height), createArrows(x, y, width, height, type), type, x, y, width, height);
 	}
 	
 	// ---------------------------------------------------------------------------------- Methods
 	
+	// Creates initial CompBoard with blank GamePieces. Used in Constructor.
 	private static GamePiece[][] createBoard(int x, int y, int width, int height) {
 		GamePiece[][] board = new GamePiece[rows][columns];
 		for(int row = 0; row < rows; row++) {
@@ -40,6 +44,7 @@ public class CompBoard extends GameObject {
 		return board;
 	}
 	
+	// Creates direction and placement of TwistArrows for CompBoard. Used in constructor.
 	private static TwistArrow[] createArrows(int x, int y, int width, int height, CompType type) {
 		TwistArrow[] arrows = new TwistArrow[2];
 		if(type == CompType.NE) {
@@ -61,6 +66,7 @@ public class CompBoard extends GameObject {
 		return arrows;
 	}
 	
+	// The following four methods give the CompType in the resulting direction, or null if it does not exist.
 	public CompType getUp() {
 		switch(getType()) {
 		case SE: return CompType.NE;
@@ -93,6 +99,7 @@ public class CompBoard extends GameObject {
 		}
 	}
 	
+	// Draws the CompBoard by drawing its lines, GamePieces, and TwistPieces. (Replace with a loop)
 	public void draw(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.drawRect(getX(), getY(), getWidth(), getHeight());

@@ -5,10 +5,13 @@ public abstract class GameObject implements Drawable {
 
 	// ---------------------------------------------------------------------------------- Properties
 	
+	// Basic rectangle
 	private int x, y, width, height;
 	
 	// ---------------------------------------------------------------------------------- Methods
 	
+	
+	// The following are useful for drawing rectangles and ovals in the children
 	public void drawFillRect(Graphics g, Color c, int x, int y, int width, int height) {
 		g.setColor(c);
 		g.fillRect(x, y, width, height);

@@ -5,9 +5,11 @@ public class TwistArrow extends GameObject {
 	
 	// ---------------------------------------------------------------------------------- Properties
 	
+	// type gives arrow direction, used tells whether it the arrow was just clicked.
 	private ArrowType type;
 	private boolean used;
 	
+	// Used internally to draw arrow
 	private Point UL = new Point(getX(), getY());
 	private Point UR = new Point(getX()+getWidth(), getY());
 	private Point BL = new Point(getX(), getY()+getHeight());
@@ -15,6 +17,7 @@ public class TwistArrow extends GameObject {
 	
 	// ---------------------------------------------------------------------------------- Constructors
 	
+	// Workhorse
 	public TwistArrow(boolean used, ArrowType type, int x, int y, int width, int height) {
 		setType(type);
 		setUsed(used);
@@ -24,6 +27,7 @@ public class TwistArrow extends GameObject {
 		setHeight(height);
 	}
 	
+	// Default TwistArrow is not "used".
 	public TwistArrow(ArrowType type, int x, int y, int width, int height) {
 		this(false, type, x, y, width, height);
 	}
@@ -34,6 +38,7 @@ public class TwistArrow extends GameObject {
 		return new TwistArrow(isUsed(), getType(), getX(), getY(), getWidth(), getHeight());
 	}
 	
+	// Draws TwistArrow depending on type
 	public void draw(Graphics g) {
 		switch(type) {
 		case NE:
