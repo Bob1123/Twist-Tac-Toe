@@ -1,8 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
 
-import javax.annotation.processing.SupportedSourceVersion;
-
 public abstract class GameObject implements Drawable {
 
 	// ---------------------------------------------------------------------------------- Properties

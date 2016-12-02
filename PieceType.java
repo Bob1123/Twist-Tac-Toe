@@ -2,7 +2,8 @@ import java.awt.Color;
 
 public enum PieceType {
 	YELLOW (Color.YELLOW),
-	BLACK (Color.BLACK);
+	BLACK (Color.BLACK),
+	BLANK (Color.WHITE);
 	
 	// ---------------------------------------------------------------------------------- Properties
 	

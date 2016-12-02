@@ -8,14 +8,22 @@ public class GamePiece extends GameObject {
 	
 	// ---------------------------------------------------------------------------------- Constructors
 	
-	public GamePiece(PieceType type) {
+	public GamePiece(PieceType type, int x, int y, int width, int height) {
 		setType(type);
+		setX(x);
+		setY(y);
+		setWidth(width);
+		setHeight(height);
+	}
+	
+	public GamePiece(int x, int y, int width, int height) {
+		this(PieceType.BLANK, x, y, width, height);
 	}
 	
 	// ---------------------------------------------------------------------------------- Methods
 	
 	public GamePiece clone() {
-		return new GamePiece(getType());
+		return new GamePiece(getType(), getX(), getY(), getWidth(), getHeight());
 	}
 	
 	public void draw(Graphics g) {

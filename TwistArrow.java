@@ -15,19 +15,23 @@ public class TwistArrow extends GameObject {
 	
 	// ---------------------------------------------------------------------------------- Constructors
 	
-	public TwistArrow(boolean used, ArrowType type) {
+	public TwistArrow(boolean used, ArrowType type, int x, int y, int width, int height) {
 		setType(type);
 		setUsed(used);
+		setX(x);
+		setY(y);
+		setWidth(width);
+		setHeight(height);
 	}
 	
-	public TwistArrow(ArrowType type) {
-		this(true, type);
+	public TwistArrow(ArrowType type, int x, int y, int width, int height) {
+		this(false, type, x, y, width, height);
 	}
 	
 	// ---------------------------------------------------------------------------------- Methods
 	
 	public TwistArrow clone() {
-		return new TwistArrow(isUsed(), getType());
+		return new TwistArrow(isUsed(), getType(), getX(), getY(), getWidth(), getHeight());
 	}
 	
 	public void draw(Graphics g) {
