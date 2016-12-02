@@ -34,6 +34,10 @@ public abstract class GameObject implements Drawable {
 		drawFillOval(g, c, x, y, width, height);
 	}
 	
+	public boolean contains(int x, int y) {
+		return getX() <= x && x <= getX()+getWidth() && getY() <= y && y <= getY()+getHeight();
+	}
+	
 	// ---------------------------------------------------------------------------------- Getters and Setters
 
 	public void setX(int x){
