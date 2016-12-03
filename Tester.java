@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -14,7 +15,7 @@ public class Tester extends JPanel {
 
 	public Tester() {
 		JFrame window = new JFrame("Twist-Tac-Toe");
-		window.setBounds(0, 0, 700, 700);
+		window.setBounds(0, 0, 900, 700);
 		window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
 		window.add(this);
 		window.setVisible(true);
@@ -40,38 +41,18 @@ public class Tester extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// There's probably a better way to do this. Store the CompBoards in an array?
-				for(GamePiece[] row : playField.getNE().getBoard()) {
-					for(GamePiece p : row) {
-						if(p.contains(getMousePosition().x, getMousePosition().y)) {
-							p.setType(whosPlaying().getPiece());
-						}
+				System.out.println(getMousePosition());
+				Point compCell = playField.getPosition(getMousePosition());
+				System.out.println(compCell);
+				if(compCell.x != -1 && compCell.y != -1) {
+					Point pieceCell = playField.getBoard()[compCell.x][compCell.y].getPosition(getMousePosition());
+					if(playField.getBoard()[compCell.x][compCell.y].getBoard()[pieceCell.x][pieceCell.y].getType() == PieceType.BLANK){
+						playField.getBoard()[compCell.x][compCell.y].getBoard()[pieceCell.x][pieceCell.y].setType(whosPlaying().getPiece());
+						p1.swapTurns();
+						p2.swapTurns();
+						repaint();
 					}
 				}
-				for(GamePiece[] row : playField.getNW().getBoard()) {
-					for(GamePiece p : row) {
-						if(p.contains(getMousePosition().x, getMousePosition().y)) {
-							p.setType(whosPlaying().getPiece());
-						}
-					}
-				}
-				for(GamePiece[] row : playField.getSE().getBoard()) {
-					for(GamePiece p : row) {
-						if(p.contains(getMousePosition().x, getMousePosition().y)) {
-							p.setType(whosPlaying().getPiece());
-						}
-					}
-				}
-				for(GamePiece[] row : playField.getSW().getBoard()) {
-					for(GamePiece p : row) {
-						if(p.contains(getMousePosition().x, getMousePosition().y)) {
-							p.setType(whosPlaying().getPiece());
-						}
-					}
-				}
-				p1.swapTurns();
-				p2.swapTurns();
-				repaint();
 			}
 		});
 
@@ -91,8 +72,6 @@ public class Tester extends JPanel {
 			}
 		});
 
-
-		System.out.println(playField.getNE().getArrows()[0]);
 	}
 
 	@Override
