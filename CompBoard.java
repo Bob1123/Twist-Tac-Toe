@@ -42,6 +42,22 @@ public class CompBoard extends GameObject {
 		return board;
 	}
 	
+	// Twists once counterclockwise
+	@SuppressWarnings("unused")
+	public void twist() {
+		if(ROWS % 2 == 1 && ROWS == COLUMNS) {
+			GamePiece[][] newBoard = cloneBoard();
+			for(int i = 0; i < ROWS; i++) {
+				for(int j = 0; j < COLUMNS; j++) {
+					newBoard[i][j].setType(getBoard()[-j+COLUMNS/2*2][i].getType());
+				}
+			}
+			setBoard(newBoard);
+		} else {
+			System.out.println("Cannot Twist!");
+		}
+	}
+	
 	public Point getPosition(Point p) {
 		Point answer = new Point();
 		int cellRow = (p.y-getY())*ROWS/getWidth();
@@ -51,7 +67,7 @@ public class CompBoard extends GameObject {
 		return answer;
 	}
 	
-	// Draws the CompBoard by drawing its lines, GamePieces, and TwistPieces.
+	// Draws the CompBoard by drawing its lines and GamePieces.
 	public void draw(Graphics g) {
 		g.setColor(Color.BLACK);
 		for(int i = 0; i <= ROWS; i++) {
@@ -60,7 +76,7 @@ public class CompBoard extends GameObject {
 		for(int i = 0; i <= COLUMNS; i++) {
 			g.drawLine(getX(), getY() + i*getHeight()/COLUMNS, getX()+getWidth(), getY() + i*getHeight()/COLUMNS);
 		}
-		for(GamePiece[] row : board) {
+		for(GamePiece[] row : getBoard()) {
 			for(GamePiece p : row) {
 				if(p != null) {
 					p.draw(g);
@@ -70,7 +86,18 @@ public class CompBoard extends GameObject {
 	}
 
 	public CompBoard clone() {
+		// Incorrect. Need to clone board.
 		return new CompBoard(getBoard(), getX(), getY(), getWidth(), getHeight());
+	}
+	
+	public GamePiece[][] cloneBoard() {
+		GamePiece[][] newboard = new GamePiece[ROWS][COLUMNS];
+		for(int i = 0; i < ROWS; i++) {
+			for(int j = 0; j < COLUMNS; j++) {
+				newboard[i][j] = getBoard()[i][j].clone();
+			}
+		}
+		return newboard;
 	}
 	
 	// ---------------------------------------------------------------------------------- Getters and Setters
