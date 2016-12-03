@@ -15,7 +15,7 @@ public class Tester extends JPanel {
 
 	public Tester() {
 		JFrame window = new JFrame("Twist-Tac-Toe");
-		window.setBounds(0, 0, 900, 700);
+		window.setBounds(0, 0, 1000, 700);
 		window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
 		window.add(this);
 		window.setVisible(true);

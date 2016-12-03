@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 
@@ -35,35 +36,16 @@ public class TwistArrow extends GameObject {
 	
 	// Draws TwistArrow depending on type
 	public void draw(Graphics g) {
-		// Used internally to draw arrow
-		// Tried to place these outside of this method, but
-		// the arrows wouldn't draw
-		Point UL = new Point(getX(), getY());
-		Point UR = new Point(getX()+getWidth(), getY());
-		Point BL = new Point(getX(), getY()+getHeight());
-		Point BR = new Point(getX()+getWidth(), getY()+getHeight());
-		
-		switch(type) {
-		case NE:
-			g.drawLine(BL.x, BL.y, UR.x, UR.y);
-			g.drawLine(UR.x, UR.y, (UL.x+UR.x)/2, UR.y);
-			g.drawLine(UR.x, UR.y, BR.x, (BR.y+UR.y)/2);
-			break;
-		case NW:
-			g.drawLine(BR.x, BR.y, UL.x, UL.y);
-			g.drawLine(UL.x, UL.y, (UR.x+UL.x)/2, UL.y);
-			g.drawLine(UL.x, UL.y, BL.x, (BL.y+UL.y)/2);
-			break;
-		case SW:
-			g.drawLine(UR.x, UR.y, BL.x, BL.y);
-			g.drawLine(BL.x, BL.y, (BR.x+BL.x)/2, BL.y);
-			g.drawLine(BL.x, BL.y, UL.x, (UL.y+BL.y)/2);
-			break;
-		case SE:
-			g.drawLine(UL.x, UL.y, BR.x, BR.y);
-			g.drawLine(BR.x, BR.y, (BL.x+BR.x)/2, BR.y);
-			g.drawLine(BR.x, BR.y, UR.x, (UR.y+BR.y)/2);
-			break;
+		g.setColor(Color.BLACK);
+		if(getType() == ArrowType.Positive) {
+			g.drawArc(getX() + getWidth()/6, getY() + getHeight()/3, getWidth()*2/3, 2*getHeight()*2/3, 0, 90);
+			g.drawLine(getX() + getWidth()/2, getY() + getHeight()/3, getX() + getWidth()*2/3, getY() + getHeight()/6);
+			g.drawLine(getX() + getWidth()/2, getY() + getHeight()/3, getX() + getWidth()*2/3, getY() + getHeight()*2/3);
+		}
+		if(getType() == ArrowType.Negative) {
+			g.drawArc(getX() + getWidth()/6, getY() - getHeight()*2/3, getWidth()*2/3, 2*getHeight()*2/3, 180, 90);
+			g.drawLine(getX() + getWidth()/6, getY(), getX() + getWidth()/6, getY() + getHeight()/2);
+			g.drawLine(getX() + getWidth()/6, getY(), getX() + getWidth()/3, getY() + getHeight()/3);
 		}
 	}
 	

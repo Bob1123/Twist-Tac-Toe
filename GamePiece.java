@@ -1,7 +1,7 @@
 import java.awt.Graphics;
 
 public class GamePiece extends GameObject {
-   
+	
 	// ---------------------------------------------------------------------------------- Properties
 	
 	// Essentially the color/player of the GamePiece

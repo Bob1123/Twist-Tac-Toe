@@ -11,12 +11,14 @@ public class GameBoard extends GameObject {
 	
 	// The four CompBoard. Might change to Array.
 	private CompBoard[][] board = new CompBoard[ROWS][COLUMNS];
+	private ArrowBoard arrows;
 	
 	// ---------------------------------------------------------------------------------- Constructors
 	
 	// Workhorse
-	public GameBoard(CompBoard[][] board, int x, int y, int width, int height) {
+	public GameBoard(CompBoard[][] board, ArrowBoard arrows, int x, int y, int width, int height) {
 		setBoard(board);
+		setArrows(arrows);
 		setX(x);
 		setY(y);
 		setWidth(width);
@@ -25,7 +27,7 @@ public class GameBoard extends GameObject {
 	
 	// Use this constructor generally
 	public GameBoard(int x, int y, int width, int height) {
-		this(createBoard(x, y, width, height), x, y, width, height);
+		this(createBoard(x, y, width, height), createArrows(x+width*11/10, y+height/3, width/2, height/2), x, y, width, height);
 	}
 	
 	// ---------------------------------------------------------------------------------- Methods
@@ -41,13 +43,27 @@ public class GameBoard extends GameObject {
 		return board;
 	}
 	
+	// Creates ArrowBoard
+	private static ArrowBoard createArrows(int x, int y, int width, int height) {
+		return new ArrowBoard(x, y, width, height);
+	}
+	
 	// Draws GameBoard by drawing its CompBoards
 	public void draw(Graphics g) {
+		for(int i = 0; i <= ROWS; i++) {
+			g.drawLine(getX() + i*getWidth()/ROWS+1, getY(), getX() + i*getWidth()/ROWS+1, getY()+getHeight());
+			g.drawLine(getX() + i*getWidth()/ROWS-1, getY(), getX() + i*getWidth()/ROWS-1, getY()+getHeight());
+		}
+		for(int i = 0; i <= COLUMNS; i++) {
+			g.drawLine(getX(), getY() + i*getHeight()/COLUMNS+1, getX()+getWidth(), getY() + i*getHeight()/COLUMNS+1);
+			g.drawLine(getX(), getY() + i*getHeight()/COLUMNS-1, getX()+getWidth(), getY() + i*getHeight()/COLUMNS-1);
+		}
 		for(int i = 0; i < ROWS; i++) {
 			for(int j = 0; j < COLUMNS; j++) {
 				board[i][j].draw(g);
 			}
 		}
+		arrows.draw(g);
 	}
 	
 	public Point getPosition(Point p) {
@@ -65,7 +81,7 @@ public class GameBoard extends GameObject {
 	}
 	
 	public GameBoard clone() {
-		return new GameBoard(getBoard(), getX(), getY(), getWidth(), getHeight());
+		return new GameBoard(getBoard(), getArrows(), getX(), getY(), getWidth(), getHeight());
 	}
 	
 	// ---------------------------------------------------------------------------------- Methods
@@ -77,8 +93,16 @@ public class GameBoard extends GameObject {
 	public void setBoard(CompBoard[][] board) {
 		this.board = board;
 	}
-	
 
+	public ArrowBoard getArrows() {
+		return arrows;
+	}
+
+	public void setArrows(ArrowBoard arrows) {
+		this.arrows = arrows;
+	}
+	
+	
 	
 	
 }
