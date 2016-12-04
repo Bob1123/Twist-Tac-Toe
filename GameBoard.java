@@ -66,6 +66,41 @@ public class GameBoard extends GameObject {
 		arrows.draw(g);
 	}
 	
+	public boolean playPiece(Point p, PieceType type) {
+		Point compCell = getPosition(p);
+		if(compCell.x != -1 && compCell.y != -1) {
+			Point pieceCell = getBoard()[compCell.x][compCell.y].getPosition(p);
+			if(getBoard()[compCell.x][compCell.y].getBoard()[pieceCell.x][pieceCell.y].getType() == PieceType.BLANK){
+				getBoard()[compCell.x][compCell.y].getBoard()[pieceCell.x][pieceCell.y].setType(type);
+				for(TwistArrow[] row : getArrows().getBoard()) {
+					for(TwistArrow t : row) {
+						t.setUsed(false);
+					}
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean twistBoard(Point p, PieceType type) {
+		Point twistCell = getArrows().getPosition(p);
+		Point exactTwistCell = getArrows().getExactPosition(p);
+		System.out.println(twistCell);
+		if(twistCell.x != -1 && twistCell.y != -1) {
+			if(!getArrows().getBoard()[exactTwistCell.x][exactTwistCell.y].isUsed()) {
+				if(getArrows().getDirection(p) == ArrowType.Negative) {
+					getBoard()[twistCell.x][twistCell.y].twist();
+					getBoard()[twistCell.x][twistCell.y].twist();
+				}
+				getBoard()[twistCell.x][twistCell.y].twist();
+				getArrows().getBoard()[exactTwistCell.x+1-(exactTwistCell.x%2)*2][exactTwistCell.y].setUsed(true);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public Point getPosition(Point p) {
 		Point answer = new Point();
 		int cellRow = (p.y-getY() < 0) ? -1 : (p.y-getY())*ROWS/getWidth();

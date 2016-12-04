@@ -30,43 +30,21 @@ public class Tester extends JPanel {
 			public void mouseExited(MouseEvent e) {}
 			@Override
 			public void mouseEntered(MouseEvent e) {}
-
+			
+			// All the work is going to be done in this method here
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println(getMousePosition());
-				Point compCell = playField.getPosition(getMousePosition());
-				System.out.println(compCell);
-				// Think about transferring this to a method in GameBoard
-				if(compCell.x != -1 && compCell.y != -1) {
-					Point pieceCell = playField.getBoard()[compCell.x][compCell.y].getPosition(getMousePosition());
-					if(playField.getBoard()[compCell.x][compCell.y].getBoard()[pieceCell.x][pieceCell.y].getType() == PieceType.BLANK){
-						playField.getBoard()[compCell.x][compCell.y].getBoard()[pieceCell.x][pieceCell.y].setType(whosPlaying().getPiece());
-						for(TwistArrow[] row : playField.getArrows().getBoard()) {
-							for(TwistArrow t : row) {
-								t.setUsed(false);
-							}
-						}
-						p1.swapTurns();
-						p2.swapTurns();
-						repaint();
-					}
+				if(playField.playPiece(getMousePosition(), whosPlaying().getPiece())) {
+					p1.swapTurns();
+					p2.swapTurns();
+					repaint();
 				}
+				
 				// Think about transferring this to a method in GameBoard
-				Point twistCell = playField.getArrows().getPosition(getMousePosition());
-				Point exactTwistCell = playField.getArrows().getExactPosition(getMousePosition());
-				System.out.println(twistCell);
-				if(twistCell.x != -1 && twistCell.y != -1) {
-					if(!playField.getArrows().getBoard()[exactTwistCell.x][exactTwistCell.y].isUsed()) {
-						if(playField.getArrows().getDirection(getMousePosition()) == ArrowType.Negative) {
-							playField.getBoard()[twistCell.x][twistCell.y].twist();
-							playField.getBoard()[twistCell.x][twistCell.y].twist();
-						}
-						playField.getBoard()[twistCell.x][twistCell.y].twist();
-						playField.getArrows().getBoard()[exactTwistCell.x+1-(exactTwistCell.x%2)*2][exactTwistCell.y].setUsed(true);
-						p1.swapTurns();
-						p2.swapTurns();
-						repaint();
-					}
+				if(playField.twistBoard(getMousePosition(), whosPlaying().getPiece())) {
+					p1.swapTurns();
+					p2.swapTurns();
+					repaint();
 				}
 			}
 		});
