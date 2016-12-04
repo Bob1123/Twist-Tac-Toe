@@ -7,10 +7,12 @@ public class ArrowBoard extends GameObject {
 	
 	// ---------------------------------------------------------------------------------- Properties
 	
-	// Sets the number of rows and columns in each CompArrowBoard
+	// Sets the number of rows and columns in each ArrowBoard. Two TwistArrows for
+	// every CompBoard, here arranged vertically.
 	public static final int ROWS = 2*GameBoard.ROWS;
 	public static final int COLUMNS = GameBoard.COLUMNS;
 	
+	// Stores the TwistArrows for display and activation.
 	private TwistArrow[][] board;
 
 	// ---------------------------------------------------------------------------------- Constructors
@@ -47,6 +49,7 @@ public class ArrowBoard extends GameObject {
 		return board;
 	}
 	
+	// From a point on the graphical board, returns the coordinates for TwistArrow[][]
 	public Point getExactPosition(Point p) {
 		Point answer = new Point();
 		int cellRow = (p.y-getY() < 0) ? -1 : (p.y-getY())*ROWS/getWidth();
@@ -56,14 +59,16 @@ public class ArrowBoard extends GameObject {
 		return answer;
 	}
 	
+	// From a point on the graphical board, returns the coordinates for the CompBoard[][] corresponding to TwistArrow[][]
 	public Point getPosition(Point p) {
 		Point exactPosition = getExactPosition(p);
 		Point answer = new Point();
-		answer.x = exactPosition.x/2;
+		answer.x = (exactPosition.x == -1) ? -1 : exactPosition.x/2;
 		answer.y = exactPosition.y;
 		return answer;
 	}
 	
+	// From a point on the graphical board, returns whether that point was in the upper half of the section of ArrowBoard
 	public ArrowType getDirection(Point p) {
 		Point exactPosition = getExactPosition(p);
 		if(exactPosition.x % 2 == 1) {

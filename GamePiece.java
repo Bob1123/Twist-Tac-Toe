@@ -67,7 +67,5 @@ public class GamePiece extends GameObject {
 			return false;
 		return true;
 	}
-	
-
    
 }

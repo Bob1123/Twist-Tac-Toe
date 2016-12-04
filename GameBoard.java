@@ -6,10 +6,10 @@ public class GameBoard extends GameObject {
 	// ---------------------------------------------------------------------------------- Properties
 	
 	// Gives the number of CompBoards in GameBoard
-	public static final int ROWS = 2;
-	public static final int COLUMNS = 2;
+	public static final int ROWS = 3;
+	public static final int COLUMNS = 3;
 	
-	// The four CompBoard. Might change to Array.
+	// Array of CompBoards and an ArrowBoard
 	private CompBoard[][] board = new CompBoard[ROWS][COLUMNS];
 	private ArrowBoard arrows;
 	
@@ -43,7 +43,7 @@ public class GameBoard extends GameObject {
 		return board;
 	}
 	
-	// Creates ArrowBoard
+	// Creates ArrowBoard. Used in Constructor
 	private static ArrowBoard createArrows(int x, int y, int width, int height) {
 		return new ArrowBoard(x, y, width, height);
 	}
@@ -66,6 +66,7 @@ public class GameBoard extends GameObject {
 		arrows.draw(g);
 	}
 	
+	// Given a point on the graphical board and whose turn it is, changes the piece there to that color
 	public boolean playPiece(Point p, PieceType type) {
 		Point compCell = getPosition(p);
 		if(compCell.x != -1 && compCell.y != -1) {
@@ -83,6 +84,7 @@ public class GameBoard extends GameObject {
 		return false;
 	}
 	
+	// Given a point on the graphical board, twists a CompBoard
 	public boolean twistBoard(Point p, PieceType type) {
 		Point twistCell = getArrows().getPosition(p);
 		Point exactTwistCell = getArrows().getExactPosition(p);
@@ -101,6 +103,7 @@ public class GameBoard extends GameObject {
 		return false;
 	}
 	
+	// Gets coordinates for CompBoard[][] from a point on the graphical board
 	public Point getPosition(Point p) {
 		Point answer = new Point();
 		int cellRow = (p.y-getY() < 0) ? -1 : (p.y-getY())*ROWS/getWidth();

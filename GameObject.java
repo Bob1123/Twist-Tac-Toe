@@ -34,6 +34,8 @@ public abstract class GameObject implements Drawable {
 		drawFillOval(g, c, x, y, width, height);
 	}
 	
+	
+	// Gives whether this rectangle contains the passed point
 	public boolean contains(int x, int y) {
 		return getX() <= x && x <= getX()+getWidth() && getY() <= y && y <= getY()+getHeight();
 	}

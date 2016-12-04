@@ -8,9 +8,10 @@ public class CompBoard extends GameObject {
 	// ---------------------------------------------------------------------------------- Properties
 	
 	// Sets the number of rows and columns in each CompBoard
-	public static final int ROWS = 3;
-	public static final int COLUMNS = 3;
+	public static final int ROWS = 2;
+	public static final int COLUMNS = 2;
 	
+	// Stores GamePieces for display and play
 	private GamePiece[][] board;
 
 	// ---------------------------------------------------------------------------------- Constructors
@@ -24,7 +25,7 @@ public class CompBoard extends GameObject {
 		setHeight(height);
 	}
 	
-	// Use this constructor generally
+	// Use this constructor generally for a new board
 	public CompBoard(int x, int y, int width, int height) {
 		this(createBoard(x, y, width, height), x, y, width, height);
 	}
@@ -42,7 +43,7 @@ public class CompBoard extends GameObject {
 		return board;
 	}
 	
-	// Twists once counterclockwise
+	// Twists once clockwise
 	@SuppressWarnings("unused")
 	public void twist() {
 		if(ROWS % 2 == 1 && ROWS == COLUMNS) {
@@ -53,11 +54,20 @@ public class CompBoard extends GameObject {
 				}
 			}
 			setBoard(newBoard);
+		} else if(ROWS == COLUMNS) {
+			GamePiece[][] newBoard = cloneBoard();
+			for(int i = 0; i < ROWS; i++) {
+				for(int j = 0; j < COLUMNS; j++) {
+					newBoard[i][j].setType(getBoard()[-j+COLUMNS-1][i].getType());
+				}
+			}
+			setBoard(newBoard);
 		} else {
-			System.out.println("Cannot Twist!");
+			System.out.println("CANNOT TWIST A RECTANGULAR BOARD");
 		}
 	}
 	
+	// Given a point on the graphical board, returns its coordinates for GamePiece[][]
 	public Point getPosition(Point p) {
 		Point answer = new Point();
 		int cellRow = (p.y-getY())*ROWS/getWidth();
@@ -90,6 +100,7 @@ public class CompBoard extends GameObject {
 		return new CompBoard(getBoard(), getX(), getY(), getWidth(), getHeight());
 	}
 	
+	// Necessary to create a clone of an array
 	public GamePiece[][] cloneBoard() {
 		GamePiece[][] newboard = new GamePiece[ROWS][COLUMNS];
 		for(int i = 0; i < ROWS; i++) {

@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 
 public class TwistArrow extends GameObject {
 	
@@ -10,7 +9,6 @@ public class TwistArrow extends GameObject {
 	private ArrowType type;
 	private boolean used;
 	
-
 	// ---------------------------------------------------------------------------------- Constructors
 	
 	// Workhorse

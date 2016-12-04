@@ -2,6 +2,7 @@ public class Player {
 	
 	// ---------------------------------------------------------------------------------- Properties
 	
+	// Variables keep track of player's number (=color) and their turn
 	public boolean myTurn;
 	public int playerNumber;
 	
@@ -14,10 +15,12 @@ public class Player {
 	
 	// ---------------------------------------------------------------------------------- Methods
 	
+	// Switches status of the turn of this player
 	public void swapTurns() {
 		setMyTurn(!isMyTurn());
 	}
 	
+	// Gets the PieceType of this player based on their number
 	public PieceType getPiece() {
 		if(playerNumber == 0) {
 			return PieceType.BLACK;
@@ -27,6 +30,8 @@ public class Player {
 		}
 		return PieceType.BLANK;
 	}
+	
+	// Need to add methods for loading and saving player stats to a file
 	
 	// ---------------------------------------------------------------------------------- Getters and Setters
 	
