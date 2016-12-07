@@ -115,7 +115,20 @@ public class GameBoard extends GameObject {
 	
 	// Used to see if there is a win in GameBoard
 	public boolean checkWin() {
-		return true;
+		
+		return false;
+	}
+	public enum Direction{
+		Up,
+		Left,
+		UpLeft,
+		Right,
+		Down,
+		DownRight;
+	}
+	private int checkWin(int x, int y, Direction dir){
+		
+		return 0;
 	}
 	
 	public GameBoard clone() {
@@ -123,6 +136,18 @@ public class GameBoard extends GameObject {
 	}
 	
 	// ---------------------------------------------------------------------------------- Methods
+	
+	public GamePiece[][] getWholeBoard(){
+		GamePiece[][] board = new GamePiece[ROWS * CompBoard.ROWS][COLUMNS * CompBoard.COLUMNS];
+		
+		for(int row = 0; row < ROWS * CompBoard.ROWS; row++){
+			for(int col = 0; col < COLUMNS * CompBoard.COLUMNS; col++){
+			board[row][col] = getBoard()[row/ROWS][col/COLUMNS].getBoard()
+					[(row/ROWS + CompBoard.ROWS-1)/CompBoard.ROWS][(col/COLUMNS+CompBoard.COLUMNS-1)/CompBoard.COLUMNS];
+			}
+		}
+		return board;
+	}
 	
 	public CompBoard[][] getBoard() {
 		return board;
