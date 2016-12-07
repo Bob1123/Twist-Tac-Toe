@@ -1,8 +1,8 @@
-// Enum for direction of a TwistArrow
-public enum ArrowType {
-	Positive (1),
-	Negative (2),
-	Neither (3);
+import java.awt.Color;
+
+public enum MoveType {
+	PIECE (1),
+	TWIST (2);
 	
 	// ---------------------------------------------------------------------------------- Properties
 	
@@ -10,7 +10,7 @@ public enum ArrowType {
 	
 	// ---------------------------------------------------------------------------------- Constructor
 	
-	ArrowType(int code) {
+	MoveType(int code) {
 		this.code = code;
 	}
 	
