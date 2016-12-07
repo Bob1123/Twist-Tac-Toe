@@ -5,18 +5,20 @@ import java.awt.Color;
 // so that null GamePieces are allowed instead of blank ones, and we
 // only draw if null. Each PieceType has an associated color.
 public enum PieceType {
-	YELLOW (Color.YELLOW),
-	BLACK (Color.BLACK),
-	BLANK (Color.WHITE);
+	YELLOW (Color.YELLOW, 1),
+	BLACK (Color.BLACK, 2),
+	BLANK (Color.WHITE, 3);
 	
 	// ---------------------------------------------------------------------------------- Properties
 	
 	private final Color color;
+	private final int code;
 	
 	// ---------------------------------------------------------------------------------- Constructor
 	
-	PieceType(Color color) {
+	PieceType(Color color, int code) {
 		this.color = color;
+		this.code = code;
 	}
 	
 	// ---------------------------------------------------------------------------------- Methods
@@ -25,6 +27,10 @@ public enum PieceType {
 	
 	public Color getColor() {
 		return color;
+	}
+	
+	public int getCode() {
+		return code;
 	}
 	
 }

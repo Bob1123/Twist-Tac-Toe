@@ -1,5 +1,8 @@
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
 
 public class GameBoard extends GameObject {
 	
@@ -9,16 +12,18 @@ public class GameBoard extends GameObject {
 	public static final int ROWS = 3;
 	public static final int COLUMNS = 3;
 	
-	// Array of CompBoards and an ArrowBoard
+	// Array of CompBoards and an ArrowBoard, along with an ArrayList of moves
 	private CompBoard[][] board = new CompBoard[ROWS][COLUMNS];
 	private ArrowBoard arrows;
+	private ArrayList<GameMove> moves;
 	
 	// ---------------------------------------------------------------------------------- Constructors
 	
 	// Workhorse
-	public GameBoard(CompBoard[][] board, ArrowBoard arrows, int x, int y, int width, int height) {
+	public GameBoard(CompBoard[][] board, ArrowBoard arrows, ArrayList<GameMove> moves, int x, int y, int width, int height) {
 		setBoard(board);
 		setArrows(arrows);
+		setMoves(moves);
 		setX(x);
 		setY(y);
 		setWidth(width);
@@ -27,7 +32,7 @@ public class GameBoard extends GameObject {
 	
 	// Use this constructor generally
 	public GameBoard(int x, int y, int width, int height) {
-		this(createBoard(x, y, width, height), createArrows(x+width*11/10, y+height/3, width/2, height/2), x, y, width, height);
+		this(createBoard(x, y, width, height), createArrows(x+width*11/10, y+height/3, width/2, height/2), new ArrayList<GameMove>(), x, y, width, height);
 	}
 	
 	// ---------------------------------------------------------------------------------- Methods
@@ -66,41 +71,154 @@ public class GameBoard extends GameObject {
 		arrows.draw(g);
 	}
 	
-	// Given a point on the graphical board and whose turn it is, changes the piece there to that color
-	public boolean playPiece(Point p, PieceType type) {
+	public void save(RandomAccessFile raf) throws IOException {
+		raf.writeInt(moves.size());
+		for(GameMove m : moves) {
+			System.out.println(moves.size());
+			System.out.println(m.getTwistType());
+			System.out.println("Trying to save move.");
+			try {
+				m.save(raf, this);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void load(RandomAccessFile raf) throws Exception {
+		moves.clear();
+		int length = raf.readInt();
+		for(int i = 0; i < length; i++) {
+			moves.add(GameMove.load(raf, this));
+		}
+	}
+	
+	public void run() {
+		for(GameMove m : moves) {
+			playMove(m);
+		}
+	}
+	
+	public GameMove getMove(Point p, PieceType type) {
 		Point compCell = getPosition(p);
 		if(compCell.x != -1 && compCell.y != -1) {
 			Point pieceCell = getBoard()[compCell.x][compCell.y].getPosition(p);
 			if(getBoard()[compCell.x][compCell.y].getBoard()[pieceCell.x][pieceCell.y].getType() == PieceType.BLANK){
-				getBoard()[compCell.x][compCell.y].getBoard()[pieceCell.x][pieceCell.y].setType(type);
+				int arrowCounter = 0;
 				for(TwistArrow[] row : getArrows().getBoard()) {
 					for(TwistArrow t : row) {
-						t.setUsed(false);
+						if(t.isUsed()) {
+							arrowCounter++;
+						}
 					}
 				}
-				return true;
+				TwistArrow[] usedArrows = new TwistArrow[arrowCounter];
+				arrowCounter = 0;
+				for(TwistArrow[] row : getArrows().getBoard()) {
+					for(TwistArrow t : row) {
+						if(t.isUsed()) {
+							usedArrows[arrowCounter] = t;
+							arrowCounter++;
+						}
+					}
+				}
+				return new GameMove(MoveType.PIECE, ArrowType.Neither, type, compCell, pieceCell, usedArrows);
 			}
 		}
-		return false;
-	}
-	
-	// Given a point on the graphical board, twists a CompBoard
-	public boolean twistBoard(Point p, PieceType type) {
+		
 		Point twistCell = getArrows().getPosition(p);
 		Point exactTwistCell = getArrows().getExactPosition(p);
-		System.out.println(twistCell);
 		if(twistCell.x != -1 && twistCell.y != -1) {
 			if(!getArrows().getBoard()[exactTwistCell.x][exactTwistCell.y].isUsed()) {
-				if(getArrows().getDirection(p) == ArrowType.Negative) {
-					getBoard()[twistCell.x][twistCell.y].twist();
-					getBoard()[twistCell.x][twistCell.y].twist();
+				int arrowCounter = 0;
+				for(TwistArrow[] row : getArrows().getBoard()) {
+					for(TwistArrow t : row) {
+						if(t.isUsed()) {
+							arrowCounter++;
+						}
+					}
 				}
-				getBoard()[twistCell.x][twistCell.y].twist();
-				getArrows().getBoard()[exactTwistCell.x+1-(exactTwistCell.x%2)*2][exactTwistCell.y].setUsed(true);
-				return true;
+				TwistArrow[] usedArrows = new TwistArrow[arrowCounter];
+				arrowCounter = 0;
+				for(TwistArrow[] row : getArrows().getBoard()) {
+					for(TwistArrow t : row) {
+						if(t.isUsed()) {
+							usedArrows[arrowCounter] = t;
+							arrowCounter++;
+						}
+					}
+				}
+				return new GameMove(MoveType.TWIST, getArrows().getDirection(p), PieceType.BLANK, twistCell, new Point(0,0), usedArrows);
 			}
 		}
-		return false;
+		
+		return null;
+	}
+	
+	public void playMove(GameMove m) {
+		if(m.getType() == MoveType.PIECE) {
+			getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].getBoard()[m.getCompCoord().x][m.getCompCoord().y].setType(m.getPieceType());
+			for(TwistArrow[] row : getArrows().getBoard()) {
+				for(TwistArrow t : row) {
+					t.setUsed(false);
+				}
+			}
+		} else if(m.getType() == MoveType.TWIST) {
+			if(m.getTwistType() == ArrowType.Negative) {
+				getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].twist();
+				getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].twist();
+			}
+			getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].twist();
+			if(m.getTwistType() == ArrowType.Positive) {
+				getArrows().getBoard()[m.getBoardCoord().x*2][m.getBoardCoord().y].setUsed(true);
+			} else if(m.getTwistType() == ArrowType.Negative) {
+				getArrows().getBoard()[m.getBoardCoord().x*2+1][m.getBoardCoord().y].setUsed(true);
+			}
+		}
+	}
+	
+	public boolean tryMove(Point p, PieceType type) {
+		GameMove m = getMove(p, type);
+		if(m == null) {
+			System.out.println("null");
+			return false;
+		}
+		System.out.println(m.getPieceType());
+		System.out.println(m.getType());
+		System.out.println(m.getBoardCoord());
+		System.out.println(m.getCompCoord());
+		moves.add(m);
+		playMove(m);
+		return true;
+	}
+	
+	public void undo() {
+		if(moves.size() == 0) return;
+		GameMove m = moves.get(moves.size()-1);
+		moves.remove(moves.size()-1);
+		if(m.getType() == MoveType.PIECE) {
+			getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].getBoard()[m.getCompCoord().x][m.getCompCoord().y].setType(PieceType.BLANK);
+		} else if(m.getType() == MoveType.TWIST) {
+			if(m.getTwistType() == ArrowType.Positive) {
+				getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].twist();
+				getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].twist();
+			}
+			getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].twist();
+			if(m.getTwistType() == ArrowType.Negative) {
+				getArrows().getBoard()[m.getBoardCoord().x*2][m.getBoardCoord().y].setUsed(false);
+			} else if(m.getTwistType() == ArrowType.Positive) {
+				getArrows().getBoard()[m.getBoardCoord().x*2+1][m.getBoardCoord().y].setUsed(false);
+			}
+		}
+		for(TwistArrow[] row : getArrows().getBoard()) {
+			for(TwistArrow t : row) {
+				t.setUsed(false);
+			}
+		}
+		for(TwistArrow t : m.getArrows()) {
+			t.setUsed(true);
+		}
 	}
 	
 	// Gets coordinates for CompBoard[][] from a point on the graphical board
@@ -119,7 +237,7 @@ public class GameBoard extends GameObject {
 	}
 	
 	public GameBoard clone() {
-		return new GameBoard(getBoard(), getArrows(), getX(), getY(), getWidth(), getHeight());
+		return new GameBoard(getBoard(), getArrows(), getMoves(), getX(), getY(), getWidth(), getHeight());
 	}
 	
 	// ---------------------------------------------------------------------------------- Methods
@@ -139,8 +257,13 @@ public class GameBoard extends GameObject {
 	public void setArrows(ArrowBoard arrows) {
 		this.arrows = arrows;
 	}
-	
-	
-	
+
+	public ArrayList<GameMove> getMoves() {
+		return moves;
+	}
+
+	public void setMoves(ArrayList<GameMove> moves) {
+		this.moves = moves;
+	}	
 	
 }
