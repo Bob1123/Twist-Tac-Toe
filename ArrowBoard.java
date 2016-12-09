@@ -31,6 +31,11 @@ public class ArrowBoard extends GameObject {
 		this(createBoard(x, y, width, height), x, y, width, height);
 	}
 	
+	// Copy Constructor
+	public ArrowBoard(ArrowBoard b) {
+		this(b.cloneBoard(), b.getX(), b.getY(), b.getWidth(), b.getHeight());
+	}
+	
 	// ---------------------------------------------------------------------------------- Methods
 	
 	// Creates initial ArrowBoard with blank GamePieces. Used in Constructor.
@@ -39,10 +44,10 @@ public class ArrowBoard extends GameObject {
 		for(int row = 0; row < ROWS; row++) {
 			for(int col = 0; col < COLUMNS; col++) {
 				if(row % 2 == 0) {
-					board[row][col] = new TwistArrow(ArrowType.Positive, x+col*width/COLUMNS, y+row*height/ROWS, width/COLUMNS, height/ROWS);
+					board[row][col] = new TwistArrow(ArrowType.POSITIVE, x+col*width/COLUMNS, y+row*height/ROWS, width/COLUMNS, height/ROWS);
 				}
 				if(row % 2 == 1) {
-					board[row][col] = new TwistArrow(ArrowType.Negative, x+col*width/COLUMNS, y+row*height/ROWS, width/COLUMNS, height/ROWS);
+					board[row][col] = new TwistArrow(ArrowType.NEGATIVE, x+col*width/COLUMNS, y+row*height/ROWS, width/COLUMNS, height/ROWS);
 				}
 			}
 		}
@@ -72,13 +77,13 @@ public class ArrowBoard extends GameObject {
 	public ArrowType getDirection(Point p) {
 		Point exactPosition = getExactPosition(p);
 		if(exactPosition.x % 2 == 1) {
-			return ArrowType.Positive;
+			return ArrowType.POSITIVE;
 		}
 		if(exactPosition.x % 2 == 0) {
-			return ArrowType.Negative;
+			return ArrowType.NEGATIVE;
 		}
 		System.out.println("Error");
-		return ArrowType.Negative;
+		return ArrowType.NEGATIVE;
 	}
 	
 	// Draws the ArrowBoard by drawing its lines and TwistPieces.
@@ -100,9 +105,19 @@ public class ArrowBoard extends GameObject {
 			}
 		}
 	}
+	
+	public TwistArrow[][] cloneBoard() {
+		TwistArrow[][] newboard = new TwistArrow[ROWS][COLUMNS];
+		for(int i = 0; i < ROWS; i++) {
+			for(int j = 0; j < COLUMNS; j++) {
+				newboard[i][j] = getBoard()[i][j].clone();
+			}
+		}
+		return newboard;
+	}
 
 	public ArrowBoard clone() {
-		return new ArrowBoard(getBoard(), getX(), getY(), getWidth(), getHeight());
+		return new ArrowBoard(this);
 	}
 	
 	// ---------------------------------------------------------------------------------- Getters and Setters
@@ -117,7 +132,15 @@ public class ArrowBoard extends GameObject {
 
 	@Override
 	public String toString() {
-		return "ArrowBoard [board=" + Arrays.toString(board) + "] " + super.toString();
+		String output = "ArrowBoard [board=";
+		for(int i = 0; i < getBoard().length; i++) {
+			for(int j = 0; j < getBoard()[i].length; j++) {
+				output = output + "@(" + i + "," + j + "): " + getBoard()[i][j].toString() + "\t";
+			}
+			output = output + "\n";
+		}
+		output = output + "]" + super.toString();
+		return output;
 	}
 
 	@Override
@@ -134,7 +157,4 @@ public class ArrowBoard extends GameObject {
 		return true;
 	}
 	
-		
-
-
 }

@@ -370,8 +370,6 @@ public class GameBoard extends GameObject {
 		return new GameBoard(getBoard(), getArrows(), getMoves(), getX(), getY(), getWidth(), getHeight());
 	}
 	
-	// ---------------------------------------------------------------------------------- Methods
-	
 	public GamePiece[][] getWholeBoard(){
 		int wholeBoardRows = ROWS * CompBoard.ROWS;
 		int wholeBoardColumns = COLUMNS * CompBoard.COLUMNS;
@@ -385,6 +383,8 @@ public class GameBoard extends GameObject {
 		}
 		return board;
 	}
+	
+	// ---------------------------------------------------------------------------------- Getters and Setters
 	
 	public CompBoard[][] getBoard() {
 		return board;

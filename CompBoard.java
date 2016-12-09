@@ -30,6 +30,11 @@ public class CompBoard extends GameObject {
 		this(createBoard(x, y, width, height), x, y, width, height);
 	}
 	
+	// Copy Constructor
+	public CompBoard(CompBoard b) {
+		this(b.cloneBoard(), b.getX(), b.getY(), b.getWidth(), b.getHeight());
+	}
+	
 	// ---------------------------------------------------------------------------------- Methods
 	
 	// Creates initial CompBoard with blank GamePieces. Used in Constructor.
@@ -94,11 +99,6 @@ public class CompBoard extends GameObject {
 			}
 		}
 	}
-
-	public CompBoard clone() {
-		// Incorrect. Need to clone board.
-		return new CompBoard(getBoard(), getX(), getY(), getWidth(), getHeight());
-	}
 	
 	// Necessary to create a clone of an array
 	public GamePiece[][] cloneBoard() {
@@ -109,6 +109,10 @@ public class CompBoard extends GameObject {
 			}
 		}
 		return newboard;
+	}
+	
+	public CompBoard clone() {
+		return new CompBoard(this);
 	}
 	
 	// ---------------------------------------------------------------------------------- Getters and Setters
@@ -123,7 +127,15 @@ public class CompBoard extends GameObject {
 
 	@Override
 	public String toString() {
-		return "CompBoard [board=" + Arrays.toString(board) + "] " + super.toString();
+		String output = "CompBoard [board=";
+		for(int i = 0; i < getBoard().length; i++) {
+			for(int j = 0; j < getBoard()[i].length; j++) {
+				output = output + "@(" + i + "," + j + "): " + getBoard()[i][j].toString() + "\t";
+			}
+			output = output + "\n";
+		}
+		output = output + "]" + super.toString();
+		return output;
 	}
 
 	@Override
@@ -139,7 +151,5 @@ public class CompBoard extends GameObject {
 			return false;
 		return true;
 	}
-	
-		
-	
+
 }

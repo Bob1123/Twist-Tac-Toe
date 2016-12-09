@@ -1,8 +1,8 @@
 // Enum for direction of a TwistArrow
 public enum ArrowType {
-	Positive (1),
-	Negative (2),
-	Neither (3);
+	POSITIVE (1),
+	NEGATIVE (2),
+	NEITHER (3);
 	
 	// ---------------------------------------------------------------------------------- Properties
 	
