@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Tester extends JPanel {
@@ -41,58 +42,7 @@ public class Tester extends JPanel {
 			// All the work is going to be done in this method here
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// Neeeeeed to unify using points or coordinates.
-				if(playField.tryMove(getMousePosition(), whosPlaying().getPiece())) {
-					p1.swapTurns();
-					p2.swapTurns();
-					repaint();
-				}
-				if(undo.contains(getMousePosition())) {
-					System.out.println("Undo");
-					playField.undo();
-					p1.swapTurns();
-					p2.swapTurns();
-					repaint();
-				}
-				if(save.contains(getMousePosition())) {
-					System.out.println("Save Game");
-					try {
-						RandomAccessFile raf = new RandomAccessFile("savegame.bin", "rw");
-						raf.setLength(0);
-						playField.save(raf);
-						raf.close();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				if(reset.contains(getMousePosition())) {
-					playField = new GameBoard(playField.getX(), playField.getY(), playField.getWidth(), playField.getHeight());
-					p1.setMyTurn(true);
-					p2.setMyTurn(false);
-					repaint();
-				}
-				if(load.contains(getMousePosition())) {
-					playField = new GameBoard(playField.getX(), playField.getY(), playField.getWidth(), playField.getHeight());
-					try {
-						playField.load(new RandomAccessFile("savegame.bin", "rw"));
-						playField.run();
-						System.out.println("LOADING GAME");
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					if(playField.getMoves().size() % 2 == 0) {
-						p1.setMyTurn(true);
-						p2.setMyTurn(false);
-					} else if(playField.getMoves().size() % 2 == 1) {
-						p1.setMyTurn(false);
-						p2.setMyTurn(true);
-					}
-					repaint();
-				}
-				System.out.println("Yellow: " + playField.checkWin(PieceType.YELLOW));
-				System.out.println("Black: " + playField.checkWin(PieceType.BLACK));
+				play(getMousePosition());
 			}
 		});
 
@@ -104,6 +54,65 @@ public class Tester extends JPanel {
 			public void mouseDragged(MouseEvent e) {}
 		});
 
+	}
+	
+	public void play(Point p) {
+		if(playField.tryMove(p, whosPlaying().getPiece())) {
+			p1.swapTurns();
+			p2.swapTurns();
+			repaint();
+		}
+		if(undo.contains(p)) {
+			System.out.println("Undo");
+			playField.undo();
+			p1.swapTurns();
+			p2.swapTurns();
+			repaint();
+		}
+		if(save.contains(p)) {
+			System.out.println("Save Game");
+			try {
+				RandomAccessFile raf = new RandomAccessFile("savegame.bin", "rw");
+				raf.setLength(0);
+				playField.save(raf);
+				raf.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if(reset.contains(p)) {
+			playField = new GameBoard(playField.getX(), playField.getY(), playField.getWidth(), playField.getHeight());
+			p1.setMyTurn(true);
+			p2.setMyTurn(false);
+			repaint();
+		}
+		if(load.contains(p)) {
+			playField = new GameBoard(playField.getX(), playField.getY(), playField.getWidth(), playField.getHeight());
+			try {
+				playField.load(new RandomAccessFile("savegame.bin", "rw"));
+				playField.run();
+				System.out.println("LOADING GAME");
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if(playField.getMoves().size() % 2 == 0) {
+				p1.setMyTurn(true);
+				p2.setMyTurn(false);
+			} else if(playField.getMoves().size() % 2 == 1) {
+				p1.setMyTurn(false);
+				p2.setMyTurn(true);
+			}
+			repaint();
+		}
+		if(playField.checkWin(PieceType.BLACK) && playField.checkWin(PieceType.YELLOW)) {
+			JOptionPane.showMessageDialog(null, "BOTH COLORS WIN!");
+		} else if(playField.checkWin(PieceType.BLACK)) {
+			JOptionPane.showMessageDialog(null, "BLACK WINS!");
+		} else if(playField.checkWin(PieceType.YELLOW)) {
+			JOptionPane.showMessageDialog(null, "YELLOW WINS!");
+		}
 	}
 
 	@Override
