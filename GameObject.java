@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 
 public abstract class GameObject implements Drawable {
 
@@ -36,8 +37,8 @@ public abstract class GameObject implements Drawable {
 	
 	
 	// Gives whether this rectangle contains the passed point
-	public boolean contains(int x, int y) {
-		return getX() <= x && x <= getX()+getWidth() && getY() <= y && y <= getY()+getHeight();
+	public boolean contains(Point p) {
+		return getX() <= p.x && p.x <= getX()+getWidth() && getY() <= p.y && p.y <= getY()+getHeight();
 	}
 	
 	// ---------------------------------------------------------------------------------- Getters and Setters

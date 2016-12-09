@@ -47,14 +47,14 @@ public class Tester extends JPanel {
 					p2.swapTurns();
 					repaint();
 				}
-				if(undo.contains(getMousePosition().x, getMousePosition().y)) {
+				if(undo.contains(getMousePosition())) {
 					System.out.println("Undo");
 					playField.undo();
 					p1.swapTurns();
 					p2.swapTurns();
 					repaint();
 				}
-				if(save.contains(getMousePosition().x, getMousePosition().y)) {
+				if(save.contains(getMousePosition())) {
 					System.out.println("Save Game");
 					try {
 						RandomAccessFile raf = new RandomAccessFile("savegame.bin", "rw");
@@ -66,13 +66,13 @@ public class Tester extends JPanel {
 						e1.printStackTrace();
 					}
 				}
-				if(reset.contains(getMousePosition().x, getMousePosition().y)) {
+				if(reset.contains(getMousePosition())) {
 					playField = new GameBoard(playField.getX(), playField.getY(), playField.getWidth(), playField.getHeight());
 					p1.setMyTurn(true);
 					p2.setMyTurn(false);
 					repaint();
 				}
-				if(load.contains(getMousePosition().x, getMousePosition().y)) {
+				if(load.contains(getMousePosition())) {
 					playField = new GameBoard(playField.getX(), playField.getY(), playField.getWidth(), playField.getHeight());
 					try {
 						playField.load(new RandomAccessFile("savegame.bin", "rw"));

@@ -50,7 +50,7 @@ public class CompBoard extends GameObject {
 	
 	// Twists once clockwise
 	@SuppressWarnings("unused")
-	public void twist() {
+	private void twist() {
 		if(ROWS % 2 == 1 && ROWS == COLUMNS) {
 			GamePiece[][] newBoard = cloneBoard();
 			for(int i = 0; i < ROWS; i++) {
@@ -69,6 +69,26 @@ public class CompBoard extends GameObject {
 			setBoard(newBoard);
 		} else {
 			System.out.println("CANNOT TWIST A RECTANGULAR BOARD");
+		}
+	}
+	
+	public void twist(ArrowType at) {
+		if(at == ArrowType.NEGATIVE) {
+			twist();
+			twist();
+			twist();
+		} else if(at == ArrowType.POSITIVE) {
+			twist();
+		}
+	}
+	
+	public void undoTwist(ArrowType at) {
+		if(at == ArrowType.POSITIVE) {
+			twist();
+			twist();
+			twist();
+		} else if(at == ArrowType.NEGATIVE) {
+			twist();
 		}
 	}
 	

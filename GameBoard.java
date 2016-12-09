@@ -3,6 +3,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GameBoard extends GameObject {
 	
@@ -35,6 +36,11 @@ public class GameBoard extends GameObject {
 		this(createBoard(x, y, width, height), createArrows(x+width*11/10, y+height/3, width/2, height/2), new ArrayList<GameMove>(), x, y, width, height);
 	}
 	
+	// Copy Constructor
+	public GameBoard(GameBoard b) {
+		this(b.cloneBoard(), b.getArrows().clone(), b.cloneMoves(), b.getX(), b.getY(), b.getWidth(), b.getHeight());
+	}
+	
 	// ---------------------------------------------------------------------------------- Methods
 	
 	// Creates initial GameBoard with blank CompBoards. Used in Constructor.
@@ -51,6 +57,24 @@ public class GameBoard extends GameObject {
 	// Creates ArrowBoard. Used in Constructor
 	private static ArrowBoard createArrows(int x, int y, int width, int height) {
 		return new ArrowBoard(x, y, width, height);
+	}
+	
+	public CompBoard[][] cloneBoard() {
+		CompBoard[][] newboard = new CompBoard[ROWS][COLUMNS];
+		for(int i = 0; i < ROWS; i++) {
+			for(int j = 0; j < COLUMNS; j++) {
+				newboard[i][j] = getBoard()[i][j].clone();
+			}
+		}
+		return newboard;
+	}
+	
+	public ArrayList<GameMove> cloneMoves() {
+		ArrayList<GameMove> newmoves = new ArrayList<GameMove>();
+		for(int i = 0; i < getMoves().size(); i++) {
+			newmoves.set(i, getMoves().get(i));
+		}
+		return newmoves;
 	}
 	
 	// Draws GameBoard by drawing its CompBoards
@@ -123,7 +147,7 @@ public class GameBoard extends GameObject {
 						}
 					}
 				}
-				return new GameMove(MoveType.PIECE, ArrowType.Neither, type, compCell, pieceCell, usedArrows);
+				return new GameMove(MoveType.PIECE, ArrowType.NEITHER, type, compCell, pieceCell, usedArrows);
 			}
 		}
 		
@@ -165,14 +189,10 @@ public class GameBoard extends GameObject {
 				}
 			}
 		} else if(m.getType() == MoveType.TWIST) {
-			if(m.getTwistType() == ArrowType.Negative) {
-				getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].twist();
-				getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].twist();
-			}
-			getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].twist();
-			if(m.getTwistType() == ArrowType.Positive) {
+			getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].twist(m.getTwistType());
+			if(m.getTwistType() == ArrowType.POSITIVE) {
 				getArrows().getBoard()[m.getBoardCoord().x*2][m.getBoardCoord().y].setUsed(true);
-			} else if(m.getTwistType() == ArrowType.Negative) {
+			} else if(m.getTwistType() == ArrowType.NEGATIVE) {
 				getArrows().getBoard()[m.getBoardCoord().x*2+1][m.getBoardCoord().y].setUsed(true);
 			}
 		}
@@ -200,14 +220,10 @@ public class GameBoard extends GameObject {
 		if(m.getType() == MoveType.PIECE) {
 			getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].getBoard()[m.getCompCoord().x][m.getCompCoord().y].setType(PieceType.BLANK);
 		} else if(m.getType() == MoveType.TWIST) {
-			if(m.getTwistType() == ArrowType.Positive) {
-				getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].twist();
-				getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].twist();
-			}
-			getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].twist();
-			if(m.getTwistType() == ArrowType.Negative) {
+			getBoard()[m.getBoardCoord().x][m.getBoardCoord().y].undoTwist(m.getTwistType());
+			if(m.getTwistType() == ArrowType.NEGATIVE) {
 				getArrows().getBoard()[m.getBoardCoord().x*2][m.getBoardCoord().y].setUsed(false);
-			} else if(m.getTwistType() == ArrowType.Positive) {
+			} else if(m.getTwistType() == ArrowType.POSITIVE) {
 				getArrows().getBoard()[m.getBoardCoord().x*2+1][m.getBoardCoord().y].setUsed(false);
 			}
 		}
@@ -231,7 +247,7 @@ public class GameBoard extends GameObject {
 		return answer;
 	}
 	
-	// Used to see if there is a win in GameBoard
+/*	// Used to see if there is a win in GameBoard
 	public boolean checkWin() {
 		int rows = ROWS * CompBoard.ROWS;
 		int columns = COLUMNS * CompBoard.COLUMNS;
@@ -364,10 +380,10 @@ public class GameBoard extends GameObject {
 		}
 		return !result;
 	}
-
+*/
 	
 	public GameBoard clone() {
-		return new GameBoard(getBoard(), getArrows(), getMoves(), getX(), getY(), getWidth(), getHeight());
+		return new GameBoard(this);
 	}
 	
 	public GamePiece[][] getWholeBoard(){
@@ -377,8 +393,7 @@ public class GameBoard extends GameObject {
 		
 		for(int row = 0; row < wholeBoardRows; row++){
 			for(int col = 0; col < wholeBoardColumns; col++){
-			board[row][col] = getBoard()[row/ROWS][col/COLUMNS].getBoard()
-					[row%CompBoard.ROWS][col%CompBoard.COLUMNS];
+			board[row][col] = getBoard()[row/ROWS][col/COLUMNS].getBoard()[row%CompBoard.ROWS][col%CompBoard.COLUMNS];
 			}
 		}
 		return board;
@@ -408,6 +423,46 @@ public class GameBoard extends GameObject {
 
 	public void setMoves(ArrayList<GameMove> moves) {
 		this.moves = moves;
+	}
+
+	
+	@Override
+	public String toString() {
+		String output = "GameBoard [board=";
+		for(int i = 0; i < getBoard().length; i++) {
+			for(int j = 0; j < getBoard()[i].length; j++) {
+				output = output + "@(" + i + "," + j + "): " + getBoard()[i][j].toString() + "\t";
+			}
+			output = output + "\n";
+		}
+		output = output + "arrows=" + getArrows().toString() + "moves=" + moves.toString() + "] " + super.toString();
+		return output;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof GameBoard))
+			return false;
+		GameBoard other = (GameBoard) obj;
+		if (arrows == null) {
+			if (other.arrows != null)
+				return false;
+		} else if (!arrows.equals(other.arrows))
+			return false;
+		if (!Arrays.deepEquals(board, other.board))
+			return false;
+		if (moves == null) {
+			if (other.moves != null)
+				return false;
+		} else if (!moves.equals(other.moves))
+			return false;
+		return true;
 	}	
+	
+	
 	
 }
