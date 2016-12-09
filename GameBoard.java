@@ -233,14 +233,157 @@ public class GameBoard extends GameObject {
 	
 	// Used to see if there is a win in GameBoard
 	public boolean checkWin() {
-		return true;
+		int rows = ROWS * CompBoard.ROWS;
+		int columns = COLUMNS * CompBoard.COLUMNS;
+		GamePiece[][] board = getWholeBoard();
+		boolean result = true;
+		for(int r = 0; r < rows; r++){
+			for(int c = 0; c < columns; c++){
+				result = result &&
+						!checkWin(r,c,Direction.Left) &&
+						!checkWin(r,c,Direction.Right) && 
+						!checkWin(r,c,Direction.Up) &&
+						!checkWin(r,c,Direction.UpLeft) &&
+						!checkWin(r,c,Direction.UpRight) &&
+						!checkWin(r,c,Direction.Down) &&
+						!checkWin(r,c,Direction.DownLeft) &&
+						!checkWin(r,c,Direction.DownRight);
+			}
+		}
+		
+		return !result;
 	}
+	public enum Direction{
+		Left,
+		Right,
+		Up,
+		UpLeft,
+		UpRight,
+		Down,
+		DownRight,
+		DownLeft,
+	}
+	private boolean checkWin(int r, int c, Direction dir){
+		int rows = ROWS * CompBoard.ROWS;
+		int columns = COLUMNS * CompBoard.COLUMNS;
+		GamePiece[][] board = getWholeBoard();
+		boolean result = true;
+		if(board[r][c].getType()==PieceType.BLANK){
+			return false;
+		}
+		switch(dir){
+		case Up:
+			if(r <= WIN-1){
+				result = result && true;
+			}else{
+				int count = 0;
+				for(int i = 1; i < WIN; i++){
+					if(board[r][c].getType()==board[r-i][c].getType()) count++;
+				}
+				result = result && (count < WIN-1);
+			}
+			break;
+		case UpLeft:
+			if(r <= WIN || c <= WIN){
+				result = result && true;
+			}else{
+				int count = 0;
+				for(int i = 1; i < WIN; i++){
+					if(board[r][c].getType()==board[r-i][c-i].getType()) count++;
+				}
+				result = result && (count < WIN-1);
+			}
+			break;
+		case UpRight:
+			if(r <= WIN || columns - c <= WIN){
+				result = result && true;
+			}else{
+				int count = 0;
+				for(int i = 1; i < WIN; i++){
+					if(board[r][c].getType()==board[r-i][c+i].getType()) count++;
+				}
+				result = result && (count < WIN-1);
+			}
+			break;
+		case Down:
+			if(rows - r <= WIN){
+				result = result && true;
+			}else{
+				int count = 0;
+				for(int i = 1; i < WIN; i++){
+					if(board[r][c].getType()==board[r+i][c].getType()) count++;
+				}
+				result = result && (count < WIN-1);
+			}
+			break;
+		case DownLeft:
+			if(rows - r <= WIN || c <= WIN){
+				result = result && true;
+			}else{
+				int count = 0;
+				for(int i = 1; i < WIN; i++){
+					if(board[r][c].getType()==board[r+i][c-i].getType()) count++;
+				}
+				result = result && (count < WIN-1);
+			}
+			break;
+		case DownRight:
+			if(rows - r <= WIN || columns - c <= WIN){
+				result = result && true;
+			}else{
+				int count = 0;
+				for(int i = 1; i < WIN; i++){
+					if(board[r][c].getType()==board[r+i][c+i].getType()) count++;
+				}
+				result = result && (count < WIN-1);
+			}
+			break;
+		case Left:
+			if(c <= WIN){
+				result = result && true;
+			}else{
+				int count = 0;
+				for(int i = 1; i < WIN; i++){
+					if(board[r][c].getType()==board[r][c-i].getType()) count++;
+				}
+				result = result && (count < WIN-1);
+			}
+			break;
+		case Right:
+			if(columns - c <= WIN){
+				result = result && true;
+			}else{
+				int count = 0;
+				for(int i = 1; i < WIN; i++){
+					if(board[r][c].getType()==board[r][c+i].getType()) count++;
+				}
+				result = result && (count < WIN-1);
+			}
+			break;
+		}
+		return !result;
+	}
+
 	
 	public GameBoard clone() {
 		return new GameBoard(getBoard(), getArrows(), getMoves(), getX(), getY(), getWidth(), getHeight());
 	}
 	
 	// ---------------------------------------------------------------------------------- Methods
+	
+	public GamePiece[][] getWholeBoard(){
+		int wholeBoardRows = ROWS * CompBoard.ROWS;
+		int wholeBoardColumns = COLUMNS * CompBoard.COLUMNS;
+		GamePiece[][] board = new GamePiece[wholeBoardRows][wholeBoardColumns];
+		
+		for(int row = 0; row < wholeBoardRows; row++){
+			for(int col = 0; col < wholeBoardColumns; col++){
+			board[row][col] = getBoard()[row/ROWS][col/COLUMNS].getBoard()
+					[row%CompBoard.ROWS][col%CompBoard.COLUMNS];
+			}
+		}
+		return board;
+	}
 	
 	public CompBoard[][] getBoard() {
 		return board;
