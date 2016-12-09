@@ -115,8 +115,8 @@ public class Tester extends JPanel {
 	}
 	
 	public Player whosPlaying() {
-		if(p1.myTurn) return p1;
-		if(p2.myTurn) return p2;
+		if(p1.isMyTurn()) return p1;
+		if(p2.isMyTurn()) return p2;
 		return p1;
 	}
 

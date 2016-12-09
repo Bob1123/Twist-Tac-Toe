@@ -3,14 +3,19 @@ public class Player {
 	// ---------------------------------------------------------------------------------- Properties
 	
 	// Variables keep track of player's number (=color) and their turn
-	public boolean myTurn;
-	public int playerNumber;
+	private boolean myTurn;
+	private int playerNumber;
 	
 	// ---------------------------------------------------------------------------------- Constructors
 	
 	public Player(boolean myTurn, int playerNumber) {
 		setMyTurn(myTurn);
 		setPlayerNumber(playerNumber);
+	}
+	
+	// Copy Constructor
+	public Player(Player p) {
+		this(p.isMyTurn(), p.getPlayerNumber());
 	}
 	
 	// ---------------------------------------------------------------------------------- Methods
@@ -29,6 +34,10 @@ public class Player {
 			return PieceType.YELLOW;
 		}
 		return PieceType.BLANK;
+	}
+	
+	public Player clone() {
+		return new Player(this);
 	}
 	
 	// Need to add methods for loading and saving player stats to a file
@@ -50,5 +59,28 @@ public class Player {
 	public void setPlayerNumber(int playerNumber) {
 		this.playerNumber = playerNumber;
 	}
+
+	@Override
+	public String toString() {
+		return "Player [myTurn=" + myTurn + ", playerNumber=" + playerNumber + "]";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Player))
+			return false;
+		Player other = (Player) obj;
+		if (myTurn != other.myTurn)
+			return false;
+		if (playerNumber != other.playerNumber)
+			return false;
+		return true;
+	}
+	
+	
 	
 }

@@ -1,5 +1,6 @@
 import java.awt.Point;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
 
 public class GameMove {
 	
@@ -23,7 +24,24 @@ public class GameMove {
 		setArrows(arrows);
 	}
 	
+	// Copy Constructor
+	public GameMove(GameMove m) {
+		this(m.getType(), m.getTwistType(), m.getPieceType(), m.clonePoint(m.getBoardCoord()), m.clonePoint(m.getCompCoord()), m.cloneArrows());
+	}
+	
 	// ---------------------------------------------------------------------------------- Methods
+	
+	public TwistArrow[] cloneArrows() {
+		TwistArrow[] newarray = new TwistArrow[getArrows().length];
+		for(int i = 0; i < getArrows().length; i++) {
+			newarray[i] = getArrows()[i].clone();
+		}
+		return newarray;
+	}
+	
+	public Point clonePoint(Point p) {
+		return new Point(p.x, p.y);
+	}
 	
 	public void save(RandomAccessFile raf, GameBoard playField) throws Exception {
 		raf.seek(raf.length());
@@ -84,6 +102,10 @@ public class GameMove {
 		return new GameMove(thisMoveType, thisArrowType, thisPieceType, thisBoardCoord, thisCompCoord, thisArrowArray);
 	}
 	
+	public GameMove clone() {
+		return new GameMove(this);
+	}
+	
 	// ---------------------------------------------------------------------------------- Getters and Setters
 	
 	public ArrowType getTwistType() {
@@ -129,5 +151,49 @@ public class GameMove {
 	public MoveType getType() {
 		return type;
 	}
+
+	
+	@Override
+	public String toString() {
+		String output ="GameMove [type=" + type + ", twistType=" + twistType + ", pieceType=" + pieceType + ", boardCoord="
+				+ boardCoord + ", compCoord=" + compCoord + ", arrows=";
+		for(int i = 0; i < getArrows().length; i++) {
+			output = output + "@" + i + ": " + getArrows()[i].toString() + "\t";
+		}
+		output = output + "]" + super.toString();
+		return output;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof GameMove))
+			return false;
+		GameMove other = (GameMove) obj;
+		if (!Arrays.equals(arrows, other.arrows))
+			return false;
+		if (boardCoord == null) {
+			if (other.boardCoord != null)
+				return false;
+		} else if (!boardCoord.equals(other.boardCoord))
+			return false;
+		if (compCoord == null) {
+			if (other.compCoord != null)
+				return false;
+		} else if (!compCoord.equals(other.compCoord))
+			return false;
+		if (pieceType != other.pieceType)
+			return false;
+		if (twistType != other.twistType)
+			return false;
+		if (type != other.type)
+			return false;
+		return true;
+	}
+	
+	
 	
 }

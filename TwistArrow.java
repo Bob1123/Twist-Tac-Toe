@@ -26,21 +26,25 @@ public class TwistArrow extends GameObject {
 		this(false, type, x, y, width, height);
 	}
 	
+	public TwistArrow(TwistArrow t) {
+		this(t.getType(), t.getX(), t.getY(), t.getWidth(), t.getHeight());
+	}
+	
 	// ---------------------------------------------------------------------------------- Methods
 	
 	public TwistArrow clone() {
-		return new TwistArrow(isUsed(), getType(), getX(), getY(), getWidth(), getHeight());
+		return new TwistArrow(this);
 	}
 	
 	// Draws TwistArrow depending on type
 	public void draw(Graphics g) {
 		g.setColor(Color.BLACK);
-		if(getType() == ArrowType.Positive) {
+		if(getType() == ArrowType.POSITIVE) {
 			g.drawArc(getX() + getWidth()/6, getY() + getHeight()/3, getWidth()*2/3, 2*getHeight()*2/3, 0, 90);
 			g.drawLine(getX() + getWidth()/2, getY() + getHeight()/3, getX() + getWidth()*2/3, getY() + getHeight()/6);
 			g.drawLine(getX() + getWidth()/2, getY() + getHeight()/3, getX() + getWidth()*2/3, getY() + getHeight()*2/3);
 		}
-		if(getType() == ArrowType.Negative) {
+		if(getType() == ArrowType.NEGATIVE) {
 			g.drawArc(getX() + getWidth()/6, getY() - getHeight()*2/3, getWidth()*2/3, 2*getHeight()*2/3, 180, 90);
 			g.drawLine(getX() + getWidth()/6, getY(), getX() + getWidth()/6, getY() + getHeight()/2);
 			g.drawLine(getX() + getWidth()/6, getY(), getX() + getWidth()/3, getY() + getHeight()/3);

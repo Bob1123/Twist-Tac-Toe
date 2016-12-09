@@ -23,10 +23,15 @@ public class GamePiece extends GameObject {
 		this(PieceType.BLANK, x, y, width, height);
 	}
 	
+	// Copy Constructor
+	public GamePiece(GamePiece p) {
+		this(p.getType(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
+	}
+	
 	// ---------------------------------------------------------------------------------- Methods
 	
 	public GamePiece clone() {
-		return new GamePiece(getType(), getX(), getY(), getWidth(), getHeight());
+		return new GamePiece(this);
 	}
 	
 	// Draw a GamePiece
