@@ -268,6 +268,7 @@ public class GameBoard extends GameObject {
 		int columns = COLUMNS * CompBoard.COLUMNS;
 		GamePiece[][] board = getWholeBoard();
 		boolean result = true;
+		int WIN = 5;
 		if(board[r][c].getType()==PieceType.BLANK){
 			return false;
 		}
