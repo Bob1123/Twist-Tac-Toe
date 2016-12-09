@@ -91,6 +91,8 @@ public class Tester extends JPanel {
 					}
 					repaint();
 				}
+				System.out.println("Yellow: " + playField.checkWin(PieceType.YELLOW));
+				System.out.println("Black: " + playField.checkWin(PieceType.BLACK));
 			}
 		});
 

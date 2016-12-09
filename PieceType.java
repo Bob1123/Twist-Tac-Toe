@@ -5,8 +5,8 @@ import java.awt.Color;
 // so that null GamePieces are allowed instead of blank ones, and we
 // only draw if null. Each PieceType has an associated color.
 public enum PieceType {
-	YELLOW (Color.YELLOW, 1),
-	BLACK (Color.BLACK, 2),
+	YELLOW (new Color(250, 250, 153), 1),
+	BLACK (new Color(64, 64, 64), 2),
 	BLANK (Color.WHITE, 3);
 	
 	// ---------------------------------------------------------------------------------- Properties

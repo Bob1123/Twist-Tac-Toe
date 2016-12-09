@@ -247,140 +247,32 @@ public class GameBoard extends GameObject {
 		return answer;
 	}
 	
-/*	// Used to see if there is a win in GameBoard
-	public boolean checkWin() {
-		int rows = ROWS * CompBoard.ROWS;
-		int columns = COLUMNS * CompBoard.COLUMNS;
-		GamePiece[][] board = getWholeBoard();
-		boolean result = true;
-		for(int r = 0; r < rows; r++){
-			for(int c = 0; c < columns; c++){
-				result = result &&
-						!checkWin(r,c,Direction.Left) &&
-						!checkWin(r,c,Direction.Right) && 
-						!checkWin(r,c,Direction.Up) &&
-						!checkWin(r,c,Direction.UpLeft) &&
-						!checkWin(r,c,Direction.UpRight) &&
-						!checkWin(r,c,Direction.Down) &&
-						!checkWin(r,c,Direction.DownLeft) &&
-						!checkWin(r,c,Direction.DownRight);
+	public boolean checkWin(PieceType pt) {
+		for(int i = 0; i < ROWS*CompBoard.ROWS; i++) {
+			for(int j = 0; j < COLUMNS*CompBoard.COLUMNS; j++) {
+				for(int k = 1; k <= 4; k++)
+					if(checkWin(pt, i, j, k, 0, getWholeBoard())) {
+						return true;
+					}
 			}
 		}
-		
-		return !result;
+		return false;
 	}
-	public enum Direction{
-		Left,
-		Right,
-		Up,
-		UpLeft,
-		UpRight,
-		Down,
-		DownRight,
-		DownLeft,
-	}
-	private boolean checkWin(int r, int c, Direction dir){
-		int rows = ROWS * CompBoard.ROWS;
-		int columns = COLUMNS * CompBoard.COLUMNS;
-		GamePiece[][] board = getWholeBoard();
-		boolean result = true;
-		int WIN = 5;
-		if(board[r][c].getType()==PieceType.BLANK){
-			return false;
+	
+	public boolean checkWin(PieceType pt, int x, int y, int dir, int counter, GamePiece[][] board) {
+		if(counter >= 5) {return true;}
+		if(x >= board.length || y >= board[0].length || x < 0) {return false;}
+		if(pt == board[x][y].getType()) {
+			switch(dir) {
+			case 1: return checkWin(pt, x+1, y, 1, counter+1, board);
+			case 2: return checkWin(pt, x+1, y+1, 2, counter+1, board);
+			case 3: return checkWin(pt, x, y+1, 3, counter+1, board);
+			case 4: return checkWin(pt, x-1, y+1, 4, counter+1, board);
+			default: return false;
+			}
 		}
-		switch(dir){
-		case Up:
-			if(r <= WIN-1){
-				result = result && true;
-			}else{
-				int count = 0;
-				for(int i = 1; i < WIN; i++){
-					if(board[r][c].getType()==board[r-i][c].getType()) count++;
-				}
-				result = result && (count < WIN-1);
-			}
-			break;
-		case UpLeft:
-			if(r <= WIN || c <= WIN){
-				result = result && true;
-			}else{
-				int count = 0;
-				for(int i = 1; i < WIN; i++){
-					if(board[r][c].getType()==board[r-i][c-i].getType()) count++;
-				}
-				result = result && (count < WIN-1);
-			}
-			break;
-		case UpRight:
-			if(r <= WIN || columns - c <= WIN){
-				result = result && true;
-			}else{
-				int count = 0;
-				for(int i = 1; i < WIN; i++){
-					if(board[r][c].getType()==board[r-i][c+i].getType()) count++;
-				}
-				result = result && (count < WIN-1);
-			}
-			break;
-		case Down:
-			if(rows - r <= WIN){
-				result = result && true;
-			}else{
-				int count = 0;
-				for(int i = 1; i < WIN; i++){
-					if(board[r][c].getType()==board[r+i][c].getType()) count++;
-				}
-				result = result && (count < WIN-1);
-			}
-			break;
-		case DownLeft:
-			if(rows - r <= WIN || c <= WIN){
-				result = result && true;
-			}else{
-				int count = 0;
-				for(int i = 1; i < WIN; i++){
-					if(board[r][c].getType()==board[r+i][c-i].getType()) count++;
-				}
-				result = result && (count < WIN-1);
-			}
-			break;
-		case DownRight:
-			if(rows - r <= WIN || columns - c <= WIN){
-				result = result && true;
-			}else{
-				int count = 0;
-				for(int i = 1; i < WIN; i++){
-					if(board[r][c].getType()==board[r+i][c+i].getType()) count++;
-				}
-				result = result && (count < WIN-1);
-			}
-			break;
-		case Left:
-			if(c <= WIN){
-				result = result && true;
-			}else{
-				int count = 0;
-				for(int i = 1; i < WIN; i++){
-					if(board[r][c].getType()==board[r][c-i].getType()) count++;
-				}
-				result = result && (count < WIN-1);
-			}
-			break;
-		case Right:
-			if(columns - c <= WIN){
-				result = result && true;
-			}else{
-				int count = 0;
-				for(int i = 1; i < WIN; i++){
-					if(board[r][c].getType()==board[r][c+i].getType()) count++;
-				}
-				result = result && (count < WIN-1);
-			}
-			break;
-		}
-		return !result;
+		return false;
 	}
-*/
 	
 	public GameBoard clone() {
 		return new GameBoard(this);
@@ -393,7 +285,7 @@ public class GameBoard extends GameObject {
 		
 		for(int row = 0; row < wholeBoardRows; row++){
 			for(int col = 0; col < wholeBoardColumns; col++){
-			board[row][col] = getBoard()[row/ROWS][col/COLUMNS].getBoard()[row%CompBoard.ROWS][col%CompBoard.COLUMNS];
+			board[row][col] = getBoard()[row/CompBoard.ROWS][col/CompBoard.COLUMNS].getBoard()[row%CompBoard.ROWS][col%CompBoard.COLUMNS];
 			}
 		}
 		return board;
@@ -462,7 +354,5 @@ public class GameBoard extends GameObject {
 			return false;
 		return true;
 	}	
-	
-	
 	
 }
